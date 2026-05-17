@@ -1,0 +1,51 @@
+{
+  "weekTitle": "Semana 2026-05-17 — Tendências + AutoForce",
+  "weekSummary": "Entrega inicial da operação de conteúdo AutoForce: planejamento semanal baseado em tendências, primeiras peças da semana e primeira rodada de variações do Tiago para banco de referências.",
+  "homeSummary": "Primeira entrega consolidada com planejamento, peças por tendência e material de treinamento visual do agente.",
+  "approvedSummary": "Banco inicial de referências positivas aprovadas do Tiago para uso futuro nas peças da AutoForce.",
+  "posts": [
+    {
+      "day": "Segunda",
+      "title": "IA sem operação só acelera o caos",
+      "description": "Post de autoridade para abrir a semana com uma tese forte sobre IA, CRM e clareza operacional.",
+      "image": "post-01-ia-sem-operacao.png"
+    },
+    {
+      "day": "Terça",
+      "title": "O que mais dá lucro não é mídia isolada. É dado conectado",
+      "description": "Ângulo de mercado ligando marketing, CRM, atendimento e vendas.",
+      "image": "post-02-dado-conectado.png"
+    },
+    {
+      "day": "Quarta",
+      "title": "Sua concessionária não precisa de mais ferramentas. Precisa de visão única",
+      "description": "Peça de produto com linguagem mais executiva e SaaS.",
+      "image": "post-03-visao-unica.png"
+    },
+    {
+      "day": "Quinta",
+      "title": "Se a busca mudou com IA, seu site não pode continuar igual",
+      "description": "Awareness sobre busca, autoridade digital e contexto de descoberta.",
+      "image": "post-04-busca-ia-site.png"
+    },
+    {
+      "day": "Sexta",
+      "title": "Descubra onde sua operação perde leads antes da venda acontecer",
+      "description": "Fechamento comercial da semana com oferta de diagnóstico.",
+      "image": "post-05-diagnostico-leads.png"
+    }
+  ],
+  "approvedReferences": [
+    {
+      "title": "Aprovada — Market Commentary",
+      "description": "Referência positiva para comentário de mercado do Tiago.",
+      "image": "02-market-commentary.png"
+    },
+    {
+      "title": "Aprovada — Branded Campaign",
+      "description": "Referência positiva para campanha/branded do Tiago.",
+      "image": "05-branded-campaign.png"
+    }
+  ],
+  "weekDate": "2026-05-17"
+}
