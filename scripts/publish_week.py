@@ -5,21 +5,13 @@ import argparse
 import html
 import json
 import os
-import re
 import shutil
 import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-IMAGE_EXTS = {'.png', '.jpg', '.jpeg', '.webp'}
 ROOT = Path(__file__).resolve().parent.parent
-
-
-def slugify(text: str) -> str:
-    text = text.strip().lower()
-    text = re.sub(r'[^a-z0-9]+', '-', text)
-    return text.strip('-') or 'semana'
 
 
 def load_meta(source: Path) -> dict[str, Any]:
@@ -30,9 +22,50 @@ def load_meta(source: Path) -> dict[str, Any]:
     raise SystemExit(f'Metadata file not found in {source}. Expected portal.json, portal-meta.json, or meta.json')
 
 
+def render_asset_card(entry: dict[str, Any], show_day: bool = True) -> str:
+    image = html.escape(entry['image'])
+    day = html.escape(entry.get('day', ''))
+    title = html.escape(entry.get('title', ''))
+    desc = html.escape(entry.get('description', ''))
+    badge = html.escape(entry.get('formatLabel', ''))
+    day_html = f'<div class="day">{day}</div>' if show_day and day else ''
+    badge_html = f'<div class="badge">{badge}</div>' if badge else ''
+    return (
+        f'<article class="card">'
+        f'<img src="{image}" alt="{title}">'
+        f'<div class="meta">{day_html}{badge_html}<div class="title">{title}</div><div class="desc">{desc}</div></div>'
+        f'</article>'
+    )
+
+
+def render_downloads(*groups: list[dict[str, Any]]) -> str:
+    seen = set()
+    items = []
+    for group in groups:
+        for entry in group:
+            image = entry['image']
+            if image in seen:
+                continue
+            seen.add(image)
+            items.append(f'<p><a href="{html.escape(image)}">{html.escape(Path(image).name)}</a></p>')
+    return ''.join(items)
+
+
 def ensure_week_index(target: Path, meta: dict[str, Any]) -> None:
-    posts = meta.get('posts', [])
+    simple_posts = meta.get('simplePosts', [])
+    carousels = meta.get('carousels', [])
+    legacy_posts = meta.get('posts', [])
     approved_refs = meta.get('approvedReferences', [])
+
+    if not simple_posts and legacy_posts:
+        simple_posts = [dict(post, formatLabel=post.get('formatLabel', 'Post simples')) for post in legacy_posts]
+    if simple_posts:
+        for post in simple_posts:
+            post.setdefault('formatLabel', 'Post simples')
+    if carousels:
+        for item in carousels:
+            item.setdefault('formatLabel', 'Carrossel')
+
     week_title = meta.get('weekTitle') or f"Semana {meta['weekDate']}"
     week_summary = meta.get('weekSummary', '')
     buttons = []
@@ -43,28 +76,18 @@ def ensure_week_index(target: Path, meta: dict[str, Any]) -> None:
     if (target / 'review-sheet.html').exists():
         buttons.append('<a href="review-sheet.html">Abrir review</a>')
 
-    posts_html = []
-    for post in posts:
-        image = html.escape(post['image'])
-        day = html.escape(post.get('day', ''))
-        title = html.escape(post.get('title', ''))
-        desc = html.escape(post.get('description', ''))
-        posts_html.append(f'<article class="card"><img src="{image}" alt="{title}"><div class="meta"><div class="day">{day}</div><div class="title">{title}</div><div class="desc">{desc}</div></div></article>')
+    simple_html = ''.join(render_asset_card(post) for post in simple_posts)
+    carousel_html = ''.join(render_asset_card(item) for item in carousels)
+    refs_html = ''.join(render_asset_card(ref, show_day=False) for ref in approved_refs)
+    downloads_html = render_downloads(simple_posts, carousels, approved_refs)
 
-    refs_html = []
-    for ref in approved_refs:
-        image = html.escape(ref['image'])
-        title = html.escape(ref.get('title', 'Referência aprovada'))
-        desc = html.escape(ref.get('description', ''))
-        refs_html.append(f'<article class="card"><img src="{image}" alt="{title}"><div class="meta"><div class="title">{title}</div><div class="desc">{desc}</div></div></article>')
+    simple_section = ''
+    if simple_posts:
+        simple_section = f'''<section class="section"><h2>Posts simples</h2><div class="grid">{simple_html}</div></section>'''
 
-    downloads = []
-    seen = set()
-    for entry in posts + approved_refs:
-        image = entry['image']
-        if image not in seen:
-            seen.add(image)
-            downloads.append(f'<p><a href="{html.escape(image)}">{html.escape(Path(image).name)}</a></p>')
+    carousel_section = ''
+    if carousels:
+        carousel_section = f'''<section class="section"><h2>Carrosséis</h2><div class="grid">{carousel_html}</div></section>'''
 
     page = f'''<!doctype html>
 <html lang="pt-BR">
@@ -76,7 +99,7 @@ def ensure_week_index(target: Path, meta: dict[str, Any]) -> None:
     :root{{--bg:#0a1020;--panel:#131b34;--text:#eef2ff;--muted:#c7cde9;--blue:#1440FF;--line:rgba(255,255,255,.08)}}
     *{{box-sizing:border-box}}body{{margin:0;font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}}
     .wrap{{max-width:1220px;margin:0 auto;padding:32px 20px 80px}} h1{{margin:0 0 8px;font-size:38px}}.lead{{color:var(--muted);max-width:860px;line-height:1.6}}
-    .section{{margin-top:28px}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}}.card{{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}}.card img{{display:block;width:100%;background:#fff}}.meta{{padding:16px}}.day{{font-size:12px;color:#8A92B7;text-transform:uppercase;letter-spacing:.08em}}.title{{font-size:20px;font-weight:700;margin-top:8px}}.desc{{font-size:14px;color:var(--muted);line-height:1.5;margin-top:8px}}.hero{{background:linear-gradient(135deg,#111936,#0e1d59);border:1px solid #223879;border-radius:24px;padding:24px}}.links a{{display:inline-block;margin:10px 10px 0 0;padding:10px 14px;border-radius:12px;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;font-size:14px}}.small a{{color:#8db0ff;text-decoration:none}}.small{{color:var(--muted);font-size:14px;line-height:1.6}}.split{{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}}.panel{{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}}@media(max-width:900px){{.split{{grid-template-columns:1fr}}}}
+    .section{{margin-top:28px}}.grid{{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}}.card{{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}}.card img{{display:block;width:100%;background:#fff}}.meta{{padding:16px}}.day{{font-size:12px;color:#8A92B7;text-transform:uppercase;letter-spacing:.08em}}.title{{font-size:20px;font-weight:700;margin-top:8px}}.desc{{font-size:14px;color:var(--muted);line-height:1.5;margin-top:8px}}.hero{{background:linear-gradient(135deg,#111936,#0e1d59);border:1px solid #223879;border-radius:24px;padding:24px}}.links a{{display:inline-block;margin:10px 10px 0 0;padding:10px 14px;border-radius:12px;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;font-size:14px}}.small a{{color:#8db0ff;text-decoration:none}}.small{{color:var(--muted);font-size:14px;line-height:1.6}}.split{{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}}.panel{{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}}.badge{{display:inline-block;margin-top:10px;padding:6px 10px;border-radius:999px;background:rgba(20,64,255,.15);color:#9bb4ff;font-size:12px;font-weight:700}}@media(max-width:900px){{.split{{grid-template-columns:1fr}}}}
   </style>
 </head>
 <body>
@@ -87,20 +110,18 @@ def ensure_week_index(target: Path, meta: dict[str, Any]) -> None:
       <div class="links">{''.join(buttons)}</div>
     </section>
 
-    <section class="section">
-      <h2>Posts da semana</h2>
-      <div class="grid">{''.join(posts_html)}</div>
-    </section>
+    {simple_section}
+    {carousel_section}
 
     <section class="section split">
       <div class="panel">
         <h2>Referências aprovadas</h2>
         <div class="small">{html.escape(meta.get('approvedSummary', 'Banco de referências positivas da semana.'))}</div>
-        <div class="grid" style="margin-top:14px">{''.join(refs_html) or '<div class="small">Nenhuma referência aprovada informada.</div>'}</div>
+        <div class="grid" style="margin-top:14px">{refs_html or '<div class="small">Nenhuma referência aprovada informada.</div>'}</div>
       </div>
       <div class="panel small">
         <h2>Downloads rápidos</h2>
-        {''.join(downloads)}
+        {downloads_html}
       </div>
     </section>
   </div>
@@ -206,10 +227,7 @@ def git_publish(root: Path, week_date: str) -> None:
     if not status.stdout.strip():
         print('No git changes to commit.')
         return
-    subprocess.run(
-        ['git', '-C', str(root), 'commit', '-m', f'chore: publish {week_date}'],
-        check=True,
-    )
+    subprocess.run(['git', '-C', str(root), 'commit', '-m', f'chore: publish {week_date}'], check=True)
     subprocess.run(['git', '-C', str(root), 'push'], check=True)
 
 

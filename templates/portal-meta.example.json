@@ -3,12 +3,20 @@
   "weekSummary": "Resumo curto da semana publicada, explicando o foco estratégico e o que foi entregue.",
   "homeSummary": "Resumo curto para aparecer no card da home do portal.",
   "approvedSummary": "Resumo curto do banco de referências positivas da semana.",
-  "posts": [
+  "simplePosts": [
     {
       "day": "Segunda",
-      "title": "Título do post",
-      "description": "Estratégia ou resumo curto do post.",
+      "title": "Título do post simples",
+      "description": "Estratégia ou resumo curto do post simples.",
       "image": "post-01.png"
+    }
+  ],
+  "carousels": [
+    {
+      "day": "Segunda",
+      "title": "Título do carrossel",
+      "description": "Resumo curto da versão em carrossel.",
+      "image": "carousel-01-cover.png"
     }
   ],
   "approvedReferences": [

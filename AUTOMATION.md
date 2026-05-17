@@ -19,8 +19,12 @@ O arquivo deve incluir:
 - `weekSummary`
 - `homeSummary`
 - `approvedSummary`
-- `posts[]`
+- `simplePosts[]`
+- `carousels[]`
 - `approvedReferences[]`
+
+Compatibilidade:
+- `posts[]` antigo ainda funciona e entra como post simples
 
 ## Exemplo de uso
 ```bash
