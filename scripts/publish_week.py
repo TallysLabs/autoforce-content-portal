@@ -7,6 +7,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -194,6 +195,24 @@ def rebuild_home(root: Path) -> None:
     (root / 'index.html').write_text(page, encoding='utf-8')
 
 
+def git_publish(root: Path, week_date: str) -> None:
+    subprocess.run(['git', '-C', str(root), 'add', '.'], check=True)
+    status = subprocess.run(
+        ['git', '-C', str(root), 'status', '--short'],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    if not status.stdout.strip():
+        print('No git changes to commit.')
+        return
+    subprocess.run(
+        ['git', '-C', str(root), 'commit', '-m', f'chore: publish {week_date}'],
+        check=True,
+    )
+    subprocess.run(['git', '-C', str(root), 'push'], check=True)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description='Publish a weekly deliverable into the AutoForce content portal.')
     ap.add_argument('--source', required=True, help='Source deliverable directory containing files and portal.json metadata')
@@ -225,7 +244,7 @@ def main() -> None:
     print(target)
 
     if args.publish:
-        os.system(f"git -C {ROOT} add . && git -C {ROOT} commit -m 'chore: publish {args.week_date}' && git -C {ROOT} push")
+        git_publish(ROOT, args.week_date)
 
 
 if __name__ == '__main__':

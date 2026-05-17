@@ -35,13 +35,28 @@ python3 scripts/publish_week.py \
 3. gera/atualiza `index.html` da semana
 4. reconstrói a home do portal
 
-## Publicação
+## Publicação manual
 Depois de revisar:
 ```bash
 git add .
 git commit -m "chore: publish 2026-05-24"
 git push
 ```
+
+## Publicação em um comando
+Se quiser que o script já publique no GitHub:
+```bash
+python3 scripts/publish_week.py \
+  --source /caminho/para/entrega-da-semana \
+  --week-date 2026-05-24 \
+  --publish
+```
+
+Nesse modo ele:
+1. publica a semana localmente
+2. faz `git add .`
+3. cria o commit
+4. faz `git push`
 
 O GitHub Pages publica automaticamente.
 
