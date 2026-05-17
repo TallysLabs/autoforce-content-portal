@@ -1,48 +1,47 @@
-# Plano Semanal Instagram AutoForce — Tendências de Mercado (Maio/2026)
+# Semana piloto AutoForce — 2026-05-17
 
-## Resumo executivo
-Semana desenhada para posicionar a AutoForce como marca que transforma tendências de IA, busca, CRM e operação automotiva em clareza comercial real. O mix preserva a cadência recomendada: autoridade forte na abertura, produto no meio, awareness contextual e fechamento com geração de demanda.
+## Resumo estratégico
+Esta semana piloto foi montada a partir de sinais reais sobre a mudança de descoberta em busca com IA, mais leituras de CRM/operação que reforçam a tese central da AutoForce: tecnologia sem processo e sem visão única aumenta vazamento, não resultado.
 
-## Visão geral
-| Dia | Post | Objetivo | Pilar | Funil | Família | Modo |
-|---|---|---|---|---|---|---|
-| Segunda | IA sem operação só acelera o caos | Autoridade | CRM / automação / IA | Topo | thesis / headline-first | autoforce-brand-campaign |
-| Terça | O que mais dá lucro não é mídia isolada. É dado conectado | Autoridade | vendas e operação comercial | Meio | institutional / brand | autoforce-brand-campaign |
-| Quarta | Sua concessionária não precisa de mais ferramentas. Precisa de visão única | Produto | produto / sites / dashboard | Meio | product / dashboard | autoforce-product-saas |
-| Quinta | Se a busca mudou com IA, seu site não pode continuar igual | Awareness | marketing automotivo | Topo | thesis / headline-first | autoforce-brand-campaign |
-| Sexta | Descubra onde sua operação perde leads antes da venda acontecer | Geração de leads | CRM / automação / IA | Fundo | commercial / offer | autoforce-brand-campaign |
+A semana foi pensada para Instagram-first e organizada em dois tipos de saída:
+- posts simples headline-first
+- um carrossel de tendência/notícia da semana
 
----
+## Backbone da semana
+1. **Autoridade** — IA está mudando a descoberta, e site fraco perde relevância antes mesmo do clique.
+2. **Produto** — concessionária não precisa de mais ferramenta solta; precisa de visão única entre site, CRM e operação.
+3. **Awareness** — o jogo está saindo de ranking puro para reconhecimento, autoridade e estrutura.
+4. **Lead gen** — descobrir onde a operação perde lead antes da venda acontecer.
+5. **Fechamento** — responder mais rápido não resolve se os sistemas continuam quebrados.
 
-## Post 1 — Segunda
-**Título:** IA sem operação só acelera o caos  
-**Estratégia da postagem:** Abrir a semana com uma tese forte contra o hype vazio de IA. A peça posiciona a AutoForce como marca madura: tecnologia só gera resultado quando há CRM, integração e clareza operacional.  
-**Imagem:** `post-01-ia-sem-operacao.png`  
-**Avaliação:** Forte em headline e clima premium. Ficou publicável, mas ainda com excesso visual secundário na área inferior e tratamento de logo menos elegante que o ideal.
+## O que ficou forte
+- Tese da semana com boa conexão entre notícia real e leitura AutoForce.
+- Material com cara mais executiva e menos genérica.
+- Ponte clara entre IA search, site, CRM e operação comercial.
+- Carrossel com narrativa natural para Instagram.
 
-## Post 2 — Terça
-**Título:** O que mais dá lucro não é mídia isolada. É dado conectado  
-**Estratégia da postagem:** Levar a discussão de mercado para a vantagem competitiva da AutoForce: dados conectados entre marketing, CRM, atendimento e vendas aumentam eficiência e margem.  
-**Imagem:** `post-02-dado-conectado.png`  
-**Avaliação:** Melhor peça do conjunto. Hierarquia forte, fit de marca convincente e cara de AutoForce mais reconhecível.
+## O que ainda precisa de curadoria humana
+- Refino do peso comercial vs institucional em alguns títulos.
+- Validação visual final das artes (aqui ainda estão em formato placeholder/review base).
+- Decidir se o fechamento da semana entra como novo simples ou vira uma segunda rota de carrossel.
 
-## Post 3 — Quarta
-**Título:** Sua concessionária não precisa de mais ferramentas. Precisa de visão única  
-**Estratégia da postagem:** Converter tendência em proposta concreta de produto. A peça apresenta a AutoForce como sistema unificado de marketing, CRM e operação comercial.  
-**Imagem:** `post-03-visao-unica.png`  
-**Avaliação:** Boa diferenciação de modo `autoforce-product-saas`: base clara, cards executivos e leitura de produto mais crível.
+## Conteúdo do pacote
+- `weekly-research.md` — shortlist, fontes e scoring
+- `portal.json` — estrutura para o portal
+- `post-01-ia-sem-operacao.svg`
+- `post-02-visao-unica-crm-site.svg`
+- `post-03-reconhecimento-mais-que-ranking.svg`
+- `post-04-diagnostico-de-leads.svg`
+- `post-05-velocidade-sem-processo.svg`
+- `carousel-01-cover.svg`
+- `carousel-01-slide-02.svg` até `carousel-01-slide-07.svg`
 
-## Post 4 — Quinta
-**Título:** Se a busca mudou com IA, seu site não pode continuar igual  
-**Estratégia da postagem:** Conectar mudança real em busca e descoberta com a necessidade de autoridade digital, estrutura e site mais forte para concessionárias.  
-**Imagem:** `post-04-busca-ia-site.png`  
-**Avaliação:** Publicável e relevante. Ficou mais conceitual do que automotivo, mas com leitura premium melhor na segunda rodada.
+## Publicação
+Quando aprovado, este pacote pode ser publicado com:
 
-## Post 5 — Sexta
-**Título:** Descubra onde sua operação perde leads antes da venda acontecer  
-**Estratégia da postagem:** Fechar a semana transformando as dores debatidas em uma oferta clara de diagnóstico operacional/comercial.  
-**Imagem:** `post-05-diagnostico-leads.png`  
-**Avaliação:** Melhorou na regeneração, com hierarquia mais limpa. Ainda é a peça mais genérica do conjunto e pede mais contexto visual de concessionária/AutoForce numa próxima rodada.
-
-## Observação final
-As peças já evitam o erro anterior de parecerem apenas “SaaS azul genérico”, especialmente nos posts 2 e 3. Ainda assim, logo aplicada nativamente e maior especificidade automotiva continuam sendo os principais pontos de evolução para treinar o agente.
+```bash
+python3 scripts/publish_week.py \
+  --source /data/.openclaw/workspace/deliverables/autoforce-pilot-week-2026-05-17 \
+  --week-date 2026-05-17 \
+  --publish
+```
